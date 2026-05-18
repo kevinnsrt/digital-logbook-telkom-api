@@ -16,6 +16,7 @@ class Documents extends Model
         'status',
         'user_id',
         'admin_id',
-        'taken_at'
+        'taken_at',
+        'janga_waktu'
     ];
 }
