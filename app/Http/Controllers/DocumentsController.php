@@ -40,7 +40,7 @@ public function add(Request $request) {
         'customer' => $validated['customer'],
         'mitra'    => $validated['mitra'],
         'price'    => $validated['price'],
-        'jangka_waktu'    => $validated['jangka_waktu   '],
+        'jangka_waktu' => $validated['jangka_waktu'],
         'status'   => 'ready',
         'user_id'  => 1, 
         'admin_id' => 1, 
