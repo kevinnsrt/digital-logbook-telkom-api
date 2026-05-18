@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('customer');
             $table->string('mitra');
             $table->float('price');
+            $table->string('jangka_waktu');
             $table->enum('status', ['ready','pending','approved','taken'])->default('ready');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
