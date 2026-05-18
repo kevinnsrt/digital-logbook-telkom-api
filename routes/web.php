@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/create', [DocumentsController::class, 'create'])->name('create');
     Route::get('/history', [DocumentsController::class, 'history'])->name('history');
-    Route::post('/store', [DocumentsController::class, 'history'])->name('documents.store');
+    Route::post('/store', [DocumentsController::class, 'add'])->name('documents.store');
 });
 
 // add documents
