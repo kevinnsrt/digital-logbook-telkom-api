@@ -31,6 +31,7 @@ public function add(Request $request) {
         'customer' => 'required|max:255',
         'mitra' => 'required|max:255',
         'price' => 'required|numeric',
+        'jangka_waktu' => 'required|max:255',
     ]);
 
 
@@ -39,6 +40,7 @@ public function add(Request $request) {
         'customer' => $validated['customer'],
         'mitra'    => $validated['mitra'],
         'price'    => $validated['price'],
+        'jangka_waktu'    => $validated['jangka_waktu   '],
         'status'   => 'ready',
         'user_id'  => 1, 
         'admin_id' => 1, 

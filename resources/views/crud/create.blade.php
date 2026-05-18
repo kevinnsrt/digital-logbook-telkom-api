@@ -50,7 +50,7 @@
                                 <label class="label">
                                     <span class="label-text font-bold">Periode Pekerjaan</span>
                                 </label>
-                                <input type="text" name="periode" placeholder="Contoh: Tahun 2026" class="input input-bordered w-full" required />
+                                <input type="text" name="jangka_waktu" placeholder="Contoh: Tahun 2026" class="input input-bordered w-full" required />
                             </div>
 
                         </div>
