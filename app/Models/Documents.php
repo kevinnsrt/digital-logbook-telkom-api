@@ -19,4 +19,10 @@ class Documents extends Model
         'taken_at',
         'jangka_waktu'
     ];
+
+    public function user(): BelongsTo
+    {
+        // Parameter kedua adalah foreign key di tabel documents kamu (misal: user_id)
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
