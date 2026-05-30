@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Documents extends Model
 {
@@ -20,9 +21,9 @@ class Documents extends Model
         'jangka_waktu'
     ];
 
-    public function user(): BelongsTo
+public function user(): BelongsTo
     {
-        // Parameter kedua adalah foreign key di tabel documents kamu (misal: user_id)
         return $this->belongsTo(User::class, 'user_id');
     }
+
 }
