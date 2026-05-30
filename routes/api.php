@@ -15,6 +15,11 @@ Route::get('/user', function (Request $request) {
     Route::post('/login',[FlutterAuthController::class,'login']);
 
 
+    Route::get('/notifications', function() {
+    // Ambil notifikasi terbaru agar muncul paling atas di aplikasi Flutter
+    return response()->json(App\Models\Notifications::latest()->get(), 200);
+})->middleware('auth:sanctum');
+
     // middleware kalau sudah login
  Route::middleware('auth:sanctum')->group(function(){
 

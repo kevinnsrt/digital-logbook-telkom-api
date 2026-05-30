@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Documents;
+use App\Models\Notifications;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
@@ -44,6 +45,13 @@ public function add(Request $request) {
         'status'   => 'ready',
         'user_id'  => 1, 
         'admin_id' => 1, 
+    ]);
+    
+    Notifications::create([
+        'title' => '📦 NPK Baru Ditambahkan',
+        'message' => "Dokumen NPK '{$document->title}' dengan mitra {$document->mitra} telah berhasil ditambahkan ke sistem.",
+        'status_type' => 'add',
+        'user_id' => auth()->id(), // ID user/admin yang input
     ]);
 
   return response()->json([
@@ -114,6 +122,13 @@ public function pending(Request $request) {
         'admin_id' => 1, 
     ]);
 
+    Notifications::create([
+        'title' => '⏳ Request Pengambilan NPK',
+        'message' => "User " . auth()->user()->name . " mendatangkan request untuk mengambil NPK '{$document->title}'.",
+        'status_type' => 'pending',
+        'user_id' => auth()->id(),
+    ]);
+
   return response()->json([
     'success' => true,
     'message' => 'Pending',
@@ -134,6 +149,13 @@ public function approved(Request $request) {
         'status'   => 'approved',
         'user_id'  => 1, 
         'admin_id' => 1, 
+    ]);
+
+    Notifications::create([
+        'title' => '✅ Request NPK Disetujui',
+        'message' => "Request pengambilan untuk dokumen '{$document->title}' telah disetujui oleh Admin.",
+        'status_type' => 'approved',
+        'user_id' => auth()->id(),
     ]);
 
   return response()->json([
@@ -159,6 +181,13 @@ public function taken(Request $request) {
         // 'user_id'  => 1, 
         'admin_id' => 1, 
         'taken_at'=> $time,
+    ]);
+
+    Notifications::create([
+        'title' => '🚀 Dokumen NPK Selesai Diambil',
+        'message' => "Proses selesai! Dokumen '{$document->title}' telah resmi diambil oleh pihak terkait.",
+        'status_type' => 'taken',
+        'user_id' => auth()->id(),
     ]);
 
   return response()->json([
