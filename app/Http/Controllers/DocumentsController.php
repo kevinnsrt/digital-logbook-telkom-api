@@ -10,7 +10,7 @@ class DocumentsController extends Controller
     //
     public function index(){
 
-        $data = Documents::all();
+        $data = Documents::with('user')->get();
         return response()->json(
             $data
             , 200);
