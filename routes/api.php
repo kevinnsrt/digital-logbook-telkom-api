@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FlutterAuthController;
 use Illuminate\Http\Request;
@@ -47,5 +48,5 @@ Route::get('/user', function (Request $request) {
 
  Route::middleware('auth:sanctum')->group(function () {
     // Route untuk update token FCM
-    Route::post('/user/update-fcm', [UserController::class, 'updateFcmToken']);
+    Route::post('/user/update-fcm', [AuthenticatedSessionController::class, 'updateFcmToken']);
 });
