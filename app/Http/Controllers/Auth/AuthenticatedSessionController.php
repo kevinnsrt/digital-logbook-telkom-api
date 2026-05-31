@@ -31,6 +31,21 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
+    public function updateFcmToken(Request $request) {
+    $request->validate([
+        'fcm_token' => 'required|string'
+    ]);
+
+    auth()->user()->update([
+        'fcm_token' => $request->fcm_token
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'FCM Token berhasil diperbarui.'
+    ], 200);
+}
+
     /**
      * Destroy an authenticated session.
      */

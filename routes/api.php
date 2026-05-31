@@ -44,3 +44,8 @@ Route::get('/user', function (Request $request) {
     // taken documents
     Route::post('/taken/{id}', [DocumentsController::class, 'taken']);
  });
+
+ Route::middleware('auth:sanctum')->group(function () {
+    // Route untuk update token FCM
+    Route::post('/user/update-fcm', [UserController::class, 'updateFcmToken']);
+});
