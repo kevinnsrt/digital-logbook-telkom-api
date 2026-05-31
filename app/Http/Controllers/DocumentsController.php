@@ -109,9 +109,9 @@ public function update(Request $request) {
 }
 
 // pending function
-public function pending(Request $request) {
+public function pending(Request $request, $id) {
 
-    $data = Documents::find($request->id);
+    $data = Documents::find($id);
 
     if (!$data) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
