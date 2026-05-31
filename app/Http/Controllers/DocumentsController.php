@@ -153,7 +153,7 @@ public function approved(Request $request) {
 
     Notifications::create([
         'title' => '✅ Request NPK Disetujui',
-        'message' => "Request pengambilan untuk dokumen '{$document->title}' telah disetujui oleh Admin.",
+        'message' => "Request pengambilan untuk dokumen '{$data->title}' telah disetujui oleh Admin.",
         'status_type' => 'approved',
         'user_id' => auth()->id(),
     ]);
@@ -185,7 +185,7 @@ public function taken(Request $request) {
 
     Notifications::create([
         'title' => '🚀 Dokumen NPK Selesai Diambil',
-        'message' => "Proses selesai! Dokumen '{$document->title}' telah resmi diambil oleh pihak terkait.",
+        'message' => "Proses selesai! Dokumen '{$data->title}' telah resmi diambil oleh pihak terkait.",
         'status_type' => 'taken',
         'user_id' => auth()->id(),
     ]);
