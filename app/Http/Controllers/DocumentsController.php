@@ -124,7 +124,7 @@ public function pending(Request $request, $id) {
 
     Notifications::create([
         'title' => '⏳ Request Pengambilan NPK',
-        'message' => "User " . auth()->user()->name . " mendatangkan request untuk mengambil NPK '{$document->title}'.",
+        'message' => "User " . auth()->user()->name . " mendatangkan request untuk mengambil NPK '{$data->title}'.",
         'status_type' => 'pending',
         'user_id' => auth()->id(),
     ]);
