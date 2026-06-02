@@ -109,25 +109,34 @@ public function update(Request $request) {
 }
 
 // pending function
-public function pending(Request $request, $id) {
+public function pending(Request $request, $id, FirebaseService $firebase) {
 
     $data = Documents::find($id);
 
     if (!$data) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
     }
+
+    $user = $request->user();
+    $userId = $user ? $user->id : 1;
+
     $data->update([
         'status'   => 'pending',
-        'user_id'  => 1, 
+        'user_id'  => $userId, 
         'admin_id' => 1, 
     ]);
 
-    Notifications::create([
-        'title' => '⏳ Request Pengambilan NPK',
-        'message' => "User " . auth()->user()->name . " mendatangkan request untuk mengambil NPK '{$data->title}'.",
-        'status_type' => 'pending',
-        'user_id' => auth()->id(),
-    ]);
+    $user = $request->user();
+
+    $admin = \App\Models\User::where('role', 'admin')->first(); 
+    
+    if ($admin && $admin->fcm_token) {
+        $firebase->sendToToken(
+            $admin->fcm_token, // Token target (HP Admin)
+            '⏳ Request Pengambilan NPK',
+            "User " . ($user ? $user->name : 'Anggota') . " mengajukan request untuk mengambil NPK '{$data->title}'."
+        );
+    }
 
   return response()->json([
     'success' => true,
@@ -138,7 +147,7 @@ public function pending(Request $request, $id) {
 }
 
 // approved function
-public function approved(Request $request) {
+public function approved(Request $request, FirebaseService $firebase) {
 
     $data = Documents::find($request->id);
 
@@ -147,16 +156,19 @@ public function approved(Request $request) {
     }
     $data->update([
         'status'   => 'approved',
-        'user_id'  => 1, 
         'admin_id' => 1, 
     ]);
 
-    Notifications::create([
-        'title' => '✅ Request NPK Disetujui',
-        'message' => "Request pengambilan untuk dokumen '{$data->title}' telah disetujui oleh Admin.",
-        'status_type' => 'approved',
-        'user_id' => auth()->id(),
-    ]);
+   $documentOwner = \App\Models\User::find($data->user_id);
+
+    // 4. Kirim notifikasi pakai sendToToken ke HP user tersebut
+    if ($documentOwner && $documentOwner->fcm_token) {
+        $firebase->sendToToken(
+            $documentOwner->fcm_token, // Token HP si user yang request
+            '✅ Request NPK Disetujui', // Judul
+            "Request pengambilan untuk dokumen '{$data->title}' telah disetujui oleh Admin." // Isi pesan
+        );
+    }
 
   return response()->json([
     'success' => true,
