@@ -49,7 +49,7 @@ public function add(Request $request) {
     
     Notifications::create([
         'title' => '📦 NPK Baru Ditambahkan',
-        'message' => "Dokumen NPK '{$document->title}' dengan mitra {$document->mitra} telah berhasil ditambahkan ke sistem.",
+        'message' => "Dokumen NPK '{$data->title}' dengan mitra {$data->mitra} telah berhasil ditambahkan ke sistem.",
         'status_type' => 'add',
         'user_id' => auth()->id(), // ID user/admin yang input
     ]);
