@@ -47,12 +47,11 @@ public function add(Request $request) {
         'admin_id' => 1, 
     ]);
     
-    Notifications::create([
-        'title' => '📦 NPK Baru Ditambahkan',
-        'message' => "Dokumen NPK '{$data->title}' dengan mitra {$data->mitra} telah berhasil ditambahkan ke sistem.",
-        'status_type' => 'add',
-        'user_id' => auth()->id(), // ID user/admin yang input
-    ]);
+    $firebase->sendToTopic(
+        'logbook_updates', // Nama topik yang di-subscribe sama anak-anak Flutter
+        'Dokumen Baru Tersedia! 📄', // Judul Notifikasi
+        'Dokumen NPK No. ' . $document->nomor_npk . ' untuk ' . $document->nama_anggota . ' telah siap di OBL.' // Isi Notifikasi
+    );
 
   return response()->json([
     'success' => true,
