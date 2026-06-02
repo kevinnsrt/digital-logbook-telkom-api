@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Documents;
 use App\Models\Notifications;
+use App\Services\FirebaseService;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
@@ -26,7 +27,7 @@ class DocumentsController extends Controller
     }
 
 // create function
-public function add(Request $request) {
+public function add(Request $request, FirebaseService $firebase) {
     $validated = $request->validate([
         'title' => 'required|max:255',
         'customer' => 'required|max:255',
@@ -50,7 +51,7 @@ public function add(Request $request) {
     $firebase->sendToTopic(
         'logbook_updates', // Nama topik yang di-subscribe sama anak-anak Flutter
         'Dokumen Baru Tersedia! 📄', // Judul Notifikasi
-        'Dokumen NPK No. ' . $document->nomor_npk . ' untuk ' . $document->nama_anggota . ' telah siap di OBL.' // Isi Notifikasi
+        'Dokumen NPK Judul. ' . $data->title . ' layanan ' . $data->jangka_waktu. ' baru ditambahkan.' // Isi Notifikasi
     );
 
   return response()->json([
