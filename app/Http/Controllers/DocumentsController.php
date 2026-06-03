@@ -20,8 +20,9 @@ class DocumentsController extends Controller
         $keyword = $request->search;
 
         $query->where(function($q) use ($keyword) {
-            $q->where('nama_dokumen', 'LIKE', "%{$keyword}%")
-              ->orWhere('status', 'LIKE', "%{$keyword}%"); // Sesuaikan nama kolom database-mu
+            $q->where('title', 'LIKE', "%{$keyword}%")
+              ->orWhere('status', 'LIKE', "%{$keyword}%")
+              ->orWhere('jangka_waktu', 'LIKE', "%{$keyword}%"); // Sesuaikan nama kolom database-mu
         });
     }
 
