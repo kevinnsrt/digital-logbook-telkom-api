@@ -37,7 +37,8 @@ class DocumentsController extends Controller
     }
 
     public function history(){
-        return view('crud.history');
+       $data = Documents::where('status', 'taken')->with('user')->get();
+       return response()->json($data,200);
     }
 
 // create function

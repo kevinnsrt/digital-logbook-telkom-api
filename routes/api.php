@@ -41,10 +41,12 @@ Route::get('/user', function (Request $request) {
 
     // approved documents
     
-
     // taken documents
     Route::post('/taken/{id}', [DocumentsController::class, 'taken']);
+
+    Route::get('/history', [DocumentsController::class, 'history']);
  });
+
 
  Route::middleware('auth:sanctum')->group(function () {
     // Route untuk update token FCM
