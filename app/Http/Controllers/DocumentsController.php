@@ -10,24 +10,21 @@ use Illuminate\Http\Request;
 class DocumentsController extends Controller
 {
     //
-    public function index(Request $request) // Tambahkan parameter Request di sini
-{
-    // Mulai query dengan eager loading relasi 'user'
+public function index(Request $request){
     $query = Documents::with('user');
 
-    // Cek apakah ada parameter 'search' di URL
     if ($request->has('search') && $request->search != '') {
         $keyword = $request->search;
 
         $query->where(function($q) use ($keyword) {
             $q->where('title', 'LIKE', "%{$keyword}%")
               ->orWhere('status', 'LIKE', "%{$keyword}%")
-              ->orWhere('jangka_waktu', 'LIKE', "%{$keyword}%"); // Sesuaikan nama kolom database-mu
+              ->orWhere('jangka_waktu', 'LIKE', "%{$keyword}%"); 
         });
     }
 
     // Eksekusi query
-    $data = $query->latest()->get(); // Pakai latest() biar dokumen terbaru muncul di atas
+    $data = $query->latest()->get(); 
 
     return response()->json($data, 200);
 }
@@ -64,8 +61,8 @@ public function add(Request $request, FirebaseService $firebase) {
     ]);
     
     $firebase->sendToTopic(
-        'logbook_updates', // Nama topik yang di-subscribe sama anak-anak Flutter
-        'Dokumen Baru Tersedia! 📄', // Judul Notifikasi
+        'logbook_updates', 
+        'Dokumen Baru Tersedia! 📄',
         'Dokumen NPK Judul. ' . $data->title . ' layanan ' . $data->jangka_waktu. ' baru ditambahkan.' // Isi Notifikasi
     );
 
@@ -81,6 +78,13 @@ public function add(Request $request, FirebaseService $firebase) {
 public function destroy($id)
 {
     $data = Documents::findOrFail($id);
+
+    if ($data->status =! 'ready'){
+    return response()->json([
+    'success' => true,
+    'message' => 'Tidak dapat menghapus data',
+    ], 200);
+    }
     $data->delete();
 
     return response()->json([
@@ -147,7 +151,7 @@ public function pending(Request $request, $id, FirebaseService $firebase) {
     
     if ($admin && $admin->fcm_token) {
         $firebase->sendToToken(
-            $admin->fcm_token, // Token target (HP Admin)
+            $admin->fcm_token, 
             '⏳ Request Pengambilan NPK',
             "User " . ($user ? $user->name : 'Anggota') . " mengajukan request untuk mengambil NPK '{$data->title}'."
         );
@@ -176,12 +180,42 @@ public function approved(Request $request, FirebaseService $firebase) {
 
    $documentOwner = \App\Models\User::find($data->user_id);
 
-    // 4. Kirim notifikasi pakai sendToToken ke HP user tersebut
     if ($documentOwner && $documentOwner->fcm_token) {
         $firebase->sendToToken(
-            $documentOwner->fcm_token, // Token HP si user yang request
-            '✅ Request NPK Disetujui', // Judul
+            $documentOwner->fcm_token, 
+            '✅ Request NPK Disetujui',
             "Request pengambilan untuk dokumen '{$data->title}' telah disetujui oleh Admin." // Isi pesan
+        );
+    }
+
+  return response()->json([
+    'success' => true,
+    'message' => 'Approved',
+    'data'    => $data
+    ], 200);
+
+}
+
+public function reject(Request $request, FirebaseService $firebase) {
+
+    $data = Documents::find($request->id);
+
+    if (!$data) {
+        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+    }
+    $data->update([
+        'user_id' => 1,
+        'status'   => 'ready',
+        'admin_id' => 1, 
+    ]);
+
+   $documentOwner = \App\Models\User::find($data->user_id);
+
+    if ($documentOwner && $documentOwner->fcm_token) {
+        $firebase->sendToToken(
+            $documentOwner->fcm_token, 
+            'Request NPK Ditolak',
+            "Request pengambilan untuk dokumen '{$data->title}' telah ditolak oleh Admin."
         );
     }
 
@@ -205,7 +239,6 @@ public function taken(Request $request) {
     $data->update([
         'status'   => 'taken',
         'user_id'  => $request->user()->id, 
-        // 'user_id'  => 1, 
         'admin_id' => 1, 
         'taken_at'=> $time,
     ]);
