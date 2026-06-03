@@ -10,13 +10,26 @@ use Illuminate\Http\Request;
 class DocumentsController extends Controller
 {
     //
-    public function index(){
+    public function index(Request $request) // Tambahkan parameter Request di sini
+{
+    // Mulai query dengan eager loading relasi 'user'
+    $query = Documents::with('user');
 
-        $data = Documents::with('user')->get();
-        return response()->json(
-            $data
-            , 200);
+    // Cek apakah ada parameter 'search' di URL
+    if ($request->has('search') && $request->search != '') {
+        $keyword = $request->search;
+
+        $query->where(function($q) use ($keyword) {
+            $q->where('nama_dokumen', 'LIKE', "%{$keyword}%")
+              ->orWhere('status', 'LIKE', "%{$keyword}%"); // Sesuaikan nama kolom database-mu
+        });
     }
+
+    // Eksekusi query
+    $data = $query->latest()->get(); // Pakai latest() biar dokumen terbaru muncul di atas
+
+    return response()->json($data, 200);
+}
 
     public function create(){
         return view('crud.create');
@@ -209,5 +222,7 @@ public function taken(Request $request) {
     ], 200);
 
 }
+
+
 
 }

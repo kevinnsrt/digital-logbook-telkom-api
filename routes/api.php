@@ -52,3 +52,4 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::post('/approved/{id}', [DocumentsController::class, 'approved']);
+
