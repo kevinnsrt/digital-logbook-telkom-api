@@ -71,14 +71,29 @@ public function register(Request $request)
     }
 
     // --- FUNGSI LOGOUT ---
-    public function logout(Request $request)
-    {
-        // Menghapus token yang sedang digunakan saat ini
-        $request->user()->currentAccessToken()->delete();
+public function logout(Request $request)
+{
+    // 1. Ambil data user yang sedang aktif dan simpan ke variabel $user
+    $user = $request->user();
+
+    if ($user) {
+        // 2. Set fcm_token menjadi null terlebih dahulu
+        $user->update([
+            'fcm_token' => null
+        ]);
+
+        // 3. Baru hapus token access Sanctum yang sedang digunakan saat ini
+        $user->currentAccessToken()->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Logout Berhasil, Token Dihapus',
+            'message' => 'Logout Berhasil, Token FCM dan Akses Dihapus',
         ], 200);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'User tidak ditemukan',
+    ], 404);
+}
 }
