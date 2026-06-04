@@ -36,6 +36,9 @@ Route::get('/user', function (Request $request) {
     // delete documents
     Route::post('/delete/{id}', [DocumentsController::class, 'destroy']);
 
+    // reject
+     Route::post('/reject/{id}', [DocumentsController::class, 'reject']);
+
     // pending documents
     Route::post('/pending/{id}', [DocumentsController::class, 'pending']);
 

@@ -204,7 +204,6 @@ public function reject(Request $request, FirebaseService $firebase) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
     }
     $data->update([
-        'user_id' => 1,
         'status'   => 'ready',
         'admin_id' => 1, 
     ]);
@@ -218,10 +217,13 @@ public function reject(Request $request, FirebaseService $firebase) {
             "Request pengambilan untuk dokumen '{$data->title}' telah ditolak oleh Admin."
         );
     }
+    $data->update([
+        'user_id'   => 1,
+    ]);
 
   return response()->json([
     'success' => true,
-    'message' => 'Approved',
+    'message' => 'Rejected',
     'data'    => $data
     ], 200);
 
