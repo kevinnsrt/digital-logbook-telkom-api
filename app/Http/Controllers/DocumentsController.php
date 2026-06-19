@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Documents;
 use App\Models\Notifications;
+use App\Models\User;
 use App\Services\FirebaseService;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,18 @@ public function index(Request $request){
     $data = $query->latest()->get(); 
 
     return response()->json($data, 200);
+}
+
+public function total(){
+    $totalDocuments = Documents::count();
+    $totalUsers = User::count();
+    $totalTaken = Documents::where('status','taken')->count();
+    
+    return response()->json([
+        'totalTaken' => $totalTaken,
+        'totalUsers'  => $totalUsers,
+        'totalDocuments'  => $totalDocuments
+    ], 200);
 }
 
     public function create(){
