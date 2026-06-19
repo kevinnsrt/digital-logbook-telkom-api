@@ -43,7 +43,8 @@ Route::get('/user', function (Request $request) {
     Route::post('/pending/{id}', [DocumentsController::class, 'pending']);
 
     // approved documents
-    
+    Route::post('/approved/{id}', [DocumentsController::class, 'approved']);
+
     // taken documents
     Route::post('/taken/{id}', [DocumentsController::class, 'taken']);
 
@@ -56,5 +57,9 @@ Route::get('/user', function (Request $request) {
     Route::post('/user/update-fcm', [AuthenticatedSessionController::class, 'updateFcmToken']);
 });
 
-Route::post('/approved/{id}', [DocumentsController::class, 'approved']);
+// buat testing pakai postman
+
+Route::get('/superadmin', [DocumentsController::class, 'total']);
+
+
 
