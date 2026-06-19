@@ -104,4 +104,22 @@ public function logout(Request $request)
         'message' => 'User tidak ditemukan',
     ], 404);
 }
+
+public function destroy($id)
+{
+    $data = User::findOrFail($id);
+
+    if ($data->status =! 'ready'){
+    return response()->json([
+    'success' => true,
+    'message' => 'Tidak dapat menghapus pengguna',
+    ], 200);
+    }
+    $data->delete();
+
+    return response()->json([
+    'success' => true,
+    'message' => 'Pengguna berhasil dihapus',
+    ], 200);
+}
 }

@@ -62,6 +62,8 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/users/list', [FlutterAuthController::class, 'userLists']);
 Route::get('/superadmin', [DocumentsController::class, 'total']);
+Route::post('/delete/users/{id}', [FlutterAuthController::class, 'destroy']);
+
 
 
 
