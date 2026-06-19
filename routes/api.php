@@ -49,6 +49,7 @@ Route::get('/user', function (Request $request) {
     Route::post('/taken/{id}', [DocumentsController::class, 'taken']);
 
     Route::get('/history', [DocumentsController::class, 'history']);
+    Route::get('/superadmin', [DocumentsController::class, 'total']);
  });
 
 
@@ -59,7 +60,7 @@ Route::get('/user', function (Request $request) {
 
 // buat testing pakai postman
 
-Route::get('/superadmin', [DocumentsController::class, 'total']);
 
+Route::get('/users/list', [FlutterAuthController::class, 'userLists']);
 
 

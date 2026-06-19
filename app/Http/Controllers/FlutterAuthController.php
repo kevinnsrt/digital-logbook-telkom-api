@@ -41,6 +41,14 @@ public function register(Request $request)
         }
     }
 
+    public function UserLists(){
+        $data = User::all()->get();
+        return response()->json([
+            'success'=> true,
+            'data' => $data,
+        ],200);
+    }
+
     // --- FUNGSI LOGIN ---
     public function login(Request $request)
     {
