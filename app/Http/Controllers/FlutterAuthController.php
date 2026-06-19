@@ -42,7 +42,7 @@ public function register(Request $request)
     }
 
     public function UserLists(){
-        $data = User::all()->get();
+        $data = User::all();
         return response()->json([
             'success'=> true,
             'data' => $data,
