@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FlutterAuthController;
 use Illuminate\Http\Request;
@@ -58,11 +59,11 @@ Route::get('/user', function (Request $request) {
 });
 
 // buat testing pakai postman
-
-
 Route::get('/users/list', [FlutterAuthController::class, 'userLists']);
 Route::get('/superadmin', [DocumentsController::class, 'total']);
 Route::post('/delete/users/{id}', [FlutterAuthController::class, 'destroy']);
+
+Route::post('/register', [RegisteredUserController::class, 'storeFromFlutter']);
 
 
 
