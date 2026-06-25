@@ -61,6 +61,9 @@ public function add(Request $request, FirebaseService $firebase) {
         'jangka_waktu' => 'required|max:255',
     ]);
 
+    $user = $request->user();
+    $userId = $user->id ;
+
 
     $data = Documents::create([
         'title'    => $validated['title'],
@@ -69,8 +72,8 @@ public function add(Request $request, FirebaseService $firebase) {
         'price'    => $validated['price'],
         'jangka_waktu' => $validated['jangka_waktu'],
         'status'   => 'ready',
-        'user_id'  => $request->user_id, 
-        'admin_id' => $request->user_id, 
+        'user_id'  => $request->userId, 
+        'admin_id' => $request->userId, 
     ]);
     
     $firebase->sendToTopic(
