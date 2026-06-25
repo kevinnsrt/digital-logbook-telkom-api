@@ -69,8 +69,8 @@ public function add(Request $request, FirebaseService $firebase) {
         'price'    => $validated['price'],
         'jangka_waktu' => $validated['jangka_waktu'],
         'status'   => 'ready',
-        'user_id'  => 1, 
-        'admin_id' => 1, 
+        'user_id'  => $request->user_id, 
+        'admin_id' => $request->user_id, 
     ]);
     
     $firebase->sendToTopic(
