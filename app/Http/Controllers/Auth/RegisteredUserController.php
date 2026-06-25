@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
         return redirect(route('dashboard', absolute: false));
     }
 
-        public function storeFromFlutter(Request $request): RedirectResponse
+        public function storeFromFlutter(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
